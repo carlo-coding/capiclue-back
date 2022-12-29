@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <title>capiclue - Reset password</title>
+  </head>
+  <body>
+    <div>
+      <h1>Cambio de contraseña</h1>
+      <form id="reset-password-form">
+        <input
+          id="password"
+          placeholder="Ingresa tu contraseña"
+          type="password"
+          required="true"
+          pattern="(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&.])[A-Za-z\d@$!%*#?&.]{8,}"
+          title="Debe contener al menos 8 carácteres, un carácter especial y un número"
+        />
+        <input
+          id="repeat-password"
+          placeholder="Repite la contrasela"
+          type="password"
+          required="true"
+          pattern=""
+          title="Las contraseñas deben coincidir"
+        />
+        <button type="submit" id="submit-button">Cambiar contraseña</button>
+      </form>
+    </div>
+
+    <div class="snackbar success hidden"></div>
+
+    <div class="snackbar error hidden"></div>
+
+    <script src="code.js"></script>
+  </body>
+</html>
