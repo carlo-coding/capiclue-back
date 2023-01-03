@@ -31,7 +31,9 @@ export class Publication {
   @ManyToOne(() => User, (user) => user.publications, { onDelete: 'CASCADE' })
   author: User;
 
-  @ManyToMany(() => User, (user) => user.favoritePublications)
+  @ManyToMany(() => User, (user) => user.favoritePublications, {
+    onDelete: 'CASCADE',
+  })
   usersThatSavedAsFavorite: User[];
 
   @OneToMany(() => Comment, (comment) => comment.publication)

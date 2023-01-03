@@ -141,8 +141,8 @@ export class CommentService {
 
       await this.publicationRepository
         .createQueryBuilder('publication')
-        .update(foundPost)
-        .set({
+        .where('publication.id = :id', { id: foundPost.id })
+        .update({
           score: () => `score + ${score}`,
         })
         .execute();
@@ -211,7 +211,8 @@ export class CommentService {
       .createQueryBuilder('c')
       .where('c.id = :commentId', { commentId })
       .innerJoin('c.commentator', 'commentator')
-      .select(['c', 'commentator'])
+      .leftJoin('commentator.avatars', 'avatars')
+      .select(['c', 'commentator', 'avatars'])
       .getOne();
     return {
       data: {

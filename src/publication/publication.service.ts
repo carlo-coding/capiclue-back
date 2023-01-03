@@ -72,7 +72,7 @@ export class PublicationService {
       .leftJoin('p.author', 'author')
       .leftJoin('author.avatars', 'author_avatars')
       .select(['p', 'images', 'author', 'author_avatars'])
-      .orderBy('p.createdAt', 'ASC');
+      .orderBy('p.createdAt', 'DESC');
     return this.isAuthorFriend(
       paginate<Publication>(queryBuilder, options),
       userId,
@@ -87,7 +87,7 @@ export class PublicationService {
       .leftJoin('p.author', 'author')
       .leftJoin('author.avatars', 'author_avatars')
       .select(['p', 'images', 'author', 'author_avatars'])
-      .orderBy('p.createdAt', 'ASC');
+      .orderBy('p.createdAt', 'DESC');
     return paginate<Publication>(queryBuilder, options);
   }
 
@@ -98,7 +98,7 @@ export class PublicationService {
       .leftJoin('p.author', 'author')
       .leftJoin('author.avatars', 'author_avatars')
       .select(['p', 'images', 'author', 'author_avatars'])
-      .orderBy('p.createdAt', 'DESC');
+      .orderBy('p.score', 'DESC');
     return paginate<Publication>(queryBuilder, options);
   }
 
@@ -261,6 +261,15 @@ export class PublicationService {
         favoritePublications: true,
       },
     });
+    const isAlreadyInFavorites =
+      foundUser.favoritePublications.find((p) => p.id === publicationId) !==
+      undefined;
+    if (isAlreadyInFavorites) {
+      throw new HttpException(
+        'Publication already in favorites',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
     if (!foundUser)
       throw new HttpException('No user found', HttpStatus.NOT_FOUND);
     const foundPublication = await this.publicationRepository
@@ -279,8 +288,8 @@ export class PublicationService {
     ];
     await this.publicationRepository
       .createQueryBuilder('publication')
-      .update(foundPublication)
-      .set({
+      .where('publication.id = :id', { id: foundPublication.id })
+      .update({
         score: () => `score + 1`,
       })
       .execute();

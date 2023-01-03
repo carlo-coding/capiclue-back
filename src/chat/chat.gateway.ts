@@ -30,7 +30,7 @@ export class ChatGateway {
     const token = client.request.headers.authorization;
     let info: IUserAuthPayload;
     try {
-      info = this.jwtService.verify(token);
+      info = this.jwtService.decode(token) as IUserAuthPayload;
     } catch (err) {
       throw new WsException('Token expired');
     }
